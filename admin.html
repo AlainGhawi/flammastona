@@ -137,11 +137,34 @@ textarea.field-input{resize:vertical;min-height:64px}
 .export-steps li .n{width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--cream);display:flex;align-items:center;justify-content:center;font-size:.78rem;font-weight:700;flex-shrink:0;margin-top:2px}
 .export-actions{display:flex;gap:10px;flex-wrap:wrap}
 
+/* MOBILE NAV BAR */
+.mobile-nav{display:none;position:fixed;bottom:0;left:0;right:0;background:var(--ink);border-top:1px solid rgba(246,239,228,.1);z-index:100;padding:6px 0 env(safe-area-inset-bottom,0)}
+.mobile-nav-inner{display:flex;justify-content:space-around}
+.mnav-btn{display:flex;flex-direction:column;align-items:center;gap:3px;background:none;border:0;color:rgba(246,239,228,.45);font-family:var(--serif2);font-size:.6rem;font-weight:600;letter-spacing:.04em;padding:6px 8px;cursor:pointer;transition:.2s;border-radius:8px;min-width:52px}
+.mnav-btn .micon{font-size:1.15rem;line-height:1}
+.mnav-btn.active{color:var(--gold)}
+
 /* RESPONSIVE */
 @media(max-width:760px){
-  .layout{grid-template-columns:1fr}
+  .layout{grid-template-columns:1fr;min-height:calc(100vh - 56px)}
   .sidebar{display:none}
+  .mobile-nav{display:block}
   .products-grid{grid-template-columns:1fr}
+  header{padding:0 14px;height:56px}
+  .head-brand small{display:none}
+  .head-actions .btn{padding:7px 12px;font-size:.82rem;gap:5px}
+  .head-actions .btn-ghost{display:none}
+  .main{padding:18px 14px 84px}
+  .page-title{font-size:1.55rem}
+  .setting-row{grid-template-columns:1fr;gap:5px;padding:12px 0}
+  .setting-row label{font-size:.8rem}
+  .ai-input{flex-direction:column;gap:8px}
+  .ai-input button{align-self:flex-end;padding:10px 20px}
+  .ai-input textarea:focus{height:72px}
+  .prod-card-head{flex-wrap:wrap;gap:8px}
+  .remove-btn{margin-left:0;margin-top:4px}
+  .export-actions{flex-direction:column}
+  .export-actions .btn{text-align:center;justify-content:center}
 }
 </style>
 </head>
@@ -294,6 +317,17 @@ textarea.field-input{resize:vertical;min-height:64px}
   </div><!-- /layout -->
 </div><!-- /app -->
 
+<!-- MOBILE BOTTOM NAV (visible only on small screens) -->
+<nav class="mobile-nav" id="mobileNav" style="display:none">
+  <div class="mobile-nav-inner">
+    <button class="mnav-btn active" onclick="showPage('ai');setMnav(this)"><span class="micon">✦</span>AI</button>
+    <button class="mnav-btn" onclick="showPage('products');setMnav(this)"><span class="micon">🕯</span>Products</button>
+    <button class="mnav-btn" onclick="showPage('texts');setMnav(this)"><span class="micon">✍</span>Texts</button>
+    <button class="mnav-btn" onclick="showPage('settings');setMnav(this)"><span class="micon">⚙</span>Settings</button>
+    <button class="mnav-btn" onclick="showPage('export');setMnav(this)"><span class="micon">🚀</span>Publish</button>
+  </div>
+</nav>
+
 <div class="toast" id="toast">
   <div class="toast-icon" id="toastIcon">✓</div>
   <div class="toast-body">
@@ -330,6 +364,7 @@ async function doLogin(){
       SESSION_TOKEN = data.token;
       document.getElementById("loginScreen").style.display = "none";
       document.getElementById("app").style.display = "block";
+      if(window.innerWidth <= 760) document.getElementById("mobileNav").style.display = "block";
       initApp();
     } else {
       errEl.textContent = "Incorrect password. Please try again.";
@@ -346,7 +381,12 @@ function doLogout(){
   SESSION_TOKEN = null;
   document.getElementById("loginScreen").style.display = "flex";
   document.getElementById("app").style.display = "none";
+  document.getElementById("mobileNav").style.display = "none";
   document.getElementById("pwInput").value = "";
+}
+function setMnav(btn){
+  document.querySelectorAll(".mnav-btn").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
 }
 
 // ---- INIT ----
@@ -434,6 +474,12 @@ function hideToast(){
 }
 // Keep showStatus as a simple wrapper for internal calls
 function showStatus(msg){ showToast("info", msg, ""); }
+
+// Show/hide mobile nav on resize
+window.addEventListener("resize", ()=>{
+  if(!SESSION_TOKEN) return;
+  document.getElementById("mobileNav").style.display = window.innerWidth <= 760 ? "block" : "none";
+});
 
 // ---- PAGE NAV ----
 function showPage(id){
