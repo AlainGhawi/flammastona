@@ -1,22 +1,34 @@
-const { getStore } = require("@netlify/blobs");
-
 exports.handler = async function (event) {
   if (event.httpMethod !== "GET") {
     return { statusCode: 405, body: "Method Not Allowed" };
   }
 
+  const githubToken = process.env.GITHUB_TOKEN;
+  const githubRepo = process.env.GITHUB_REPO;
+
+  if (!githubToken || !githubRepo) {
+    return {
+      statusCode: 500,
+      body: JSON.stringify({ error: "GITHUB_TOKEN or GITHUB_REPO not set." }),
+    };
+  }
+
   try {
-    const store = getStore({
-      name: "site-config",
-      siteID: process.env.NETLIFY_SITE_ID,
-      token: process.env.NETLIFY_TOKEN,
+    const apiUrl = `https://api.github.com/repos/${githubRepo}/contents/config.json`;
+
+    const resp = await fetch(apiUrl, {
+      headers: {
+        "Authorization": `Bearer ${githubToken}`,
+        "Accept": "application/vnd.github+json",
+      },
     });
 
-    const config = await store.get("config", { type: "json" });
-
-    if (!config) {
-      return { statusCode: 404, body: JSON.stringify({ error: "No config saved yet" }) };
+    if (!resp.ok) {
+      return { statusCode: 404, body: JSON.stringify({ error: "config.json not found in repo" }) };
     }
+
+    const data = await resp.json();
+    const config = JSON.parse(Buffer.from(data.content, "base64").toString("utf8"));
 
     return {
       statusCode: 200,
