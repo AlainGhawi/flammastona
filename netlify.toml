@@ -1,0 +1,22 @@
+[build]
+  functions = "netlify/functions"
+
+[[redirects]]
+  from = "/api/login"
+  to = "/.netlify/functions/login"
+  status = 200
+
+[[redirects]]
+  from = "/api/chat"
+  to = "/.netlify/functions/chat"
+  status = 200
+
+[[redirects]]
+  from = "/api/save"
+  to = "/.netlify/functions/save"
+  status = 200
+
+[[redirects]]
+  from = "/api/load"
+  to = "/.netlify/functions/load"
+  status = 200
