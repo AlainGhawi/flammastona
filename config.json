@@ -107,7 +107,7 @@
         "ar": "الأكثر مبيعاً"
       },
       "name": {
-        "en": "Amber Ember 3",
+        "en": "Amber Ember",
         "fr": "Braise d'Ambre",
         "ar": "جمر العنبر"
       },
@@ -121,8 +121,8 @@
         "fr": "Une lueur dorée et chaleureuse aux notes douces de vanille et d'ambre.",
         "ar": "وهجٌ ذهبيٌّ دافئ بلمسات ناعمة من الفانيليا والعنبر."
       },
-      "priceUsd": 18,
-      "priceLbp": "1,600,000"
+      "priceUsd": 10,
+      "priceLbp": "900,000"
     },
     {
       "id": 2,
