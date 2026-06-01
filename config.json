@@ -263,6 +263,28 @@
       },
       "priceUsd": 2,
       "priceLbp": "180,000"
+    },
+    {
+      "id": 8,
+      "img": "",
+      "tag": null,
+      "name": {
+        "en": "Easter Spirit",
+        "fr": "Nouvelle Bougie",
+        "ar": "شمعة جديدة"
+      },
+      "scent": {
+        "en": "Scent",
+        "fr": "Parfum",
+        "ar": "عطر"
+      },
+      "desc": {
+        "en": "Description",
+        "fr": "Description",
+        "ar": "وصف"
+      },
+      "priceUsd": 10,
+      "priceLbp": "900,000"
     }
   ]
 }
